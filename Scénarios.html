@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Scénarios - Projet Caux-Seine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        .scenario-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .economic {
+            background-color: #e6f7ff;
+            border-left: 5px solid #007bff;
+        }
+
+        .environmental {
+            background-color: #e6ffe6;
+            border-left: 5px solid #28a745;
+        }
+
+        .socio-techno {
+            background-color: #fff2e6;
+            border-left: 5px solid #fd7e14;
+        }
+
+        .section-title {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+        }
+
+        .economic .section-title {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        .environmental .section-title {
+            color: #28a745;
+            border-bottom-color: #28a745;
+        }
+
+        .socio-techno .section-title {
+            color: #fd7e14;
+            border-bottom-color: #fd7e14;
+        }
+
+        .scenario-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .economic button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .environmental button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .socio-techno button {
+            background-color: #fd7e14;
+            color: white;
+        }
+
+        .scenario-buttons button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .chart {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin: auto;
+        }
+
+        .legend {
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .details {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .details h3 {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .impact-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .impact-table th {
+            background-color: #e9ecef;
+        }
+        
+        .solution-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .solution-table th {
+            background-color: #e9ecef;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Scénarios - Projet Caux-Seine</h1>
+
+    <!-- Section Économique -->
+    <div class="scenario-section economic">
+        <h2 class="section-title">Scénarios Économiques</h2>
+
+        <div class="scenario-buttons">
+            <button onclick="updateScenario('ouvertureUsines')">Ouverture de nouvelles usines</button>
+            <button onclick="updateScenario('fermetureUsines')">Fermeture d'usines</button>
+            <button onclick="updateScenario('efficaciteUsines')">Amélioration de l'efficacité des usines</button>
+            <button onclick="updateScenario('tarification')">Évolution de la tarification</button>
+        </div>
+    </div>
+
+    <!-- Section Environnementale/Climatique -->
+    <div class="scenario-section environmental">
+        <h2 class="section-title">Scénarios Climatiques et Environnementaux</h2>
+
+        <div class="scenario-buttons">
+            <button onclick="updateScenario('inondations')">Inondations aggravées</button>
+            <button onclick="updateScenario('canicules')">Canicules et stress hydrique</button>
+            <button onclick="updateScenario('tempetes')">Tempêtes et montée du niveau marin</button>
+            <button onclick="updateScenario('pollutionIndustrielle')">Pollution industrielle et agricole</button>
+        </div>
+    </div>
+
+    <!-- Section Socio-Techno-Démographique -->
+    <div class="scenario-section socio-techno">
+        <h2 class="section-title">Scénarios Socio-Techno-Démographiques</h2>
+
+        <div class="scenario-buttons">
+            <button onclick="updateScenario('evolutionPopulation')">Évolution démographique</button>
+            <button onclick="updateScenario('vieillissementInfrastructures')">Vieillissement des infrastructures</button>
+        </div>
+    </div>
+
+    <!-- Zone d'affichage des résultats -->
+    <div class="chart-container">
+        <div id="chart" class="chart"></div>
+    </div>
+    <div id="legend" class="legend"></div>
+
+    <div class="details" id="details">
+        <!-- Détails des scénarios seront affichés ici -->
+    </div>
+</div>
+
+<script>
+    const scenarios = {
+        ouvertureUsines: {
+            name: "Ouverture de nouvelles usines",
+            description: "Impact de l'ouverture de nouvelles usines (Air Liquide, Eastman, Futerro)",
+            elements: [
+                { name: "Air Liquide", value: 1800000 },
+                { name: "Eastman", value: 1935960 },
+                { name: "Futerro", value: 1927200 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Ce scénario prévoit une augmentation de la consommation d'eau de 5 663 160 m³/an, soit 18.9% de la consommation industrielle en plus.</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Mécanismes impactés</th>
+                        <th>Volume de départ (m³/an)</th>
+                        <th>Variation en volume (m³/an)</th>
+                    </tr>
+                    <tr>
+                        <td>Pompage dans le sol</td>
+                        <td>29 974 253,9</td>
+                        <td>+5 663 160</td>
+                    </tr>
+                    <tr>
+                        <td>Pompage dans les nappes souterraines</td>
+                        <td>61 000</td>
+                        <td>+11 525</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets dans les sols (5% des rejets)</td>
+                        <td>5% des rejets</td>
+                        <td>+283 158</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets dans les étendues d'eau (95% des rejets)</td>
+                        <td>95% des rejets</td>
+                        <td>+5 380 002</td>
+                    </tr>
+                    <tr>
+                        <td>Assainissement des entreprises</td>
+                        <td>5 000</td>
+                        <td>+945</td>
+                    </tr>
+                    <tr>
+                        <td>Approvisionnement eau industrielle</td>
+                        <td>66 530</td>
+                        <td>+12 570</td>
+                    </tr>
+                </table>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Stress accru sur les ressources en eau souterraines et de surface</li>
+                    <li>Hausse des coûts d'exploitation et d'assainissement (bénéfice supplémentaire estimé à 5 663 160€/an)</li>
+                    <li>Augmentation des risques de restrictions en cas de sécheresse</li>
+                    <li>Besoin d'investissements dans les infrastructures hydriques</li>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <ul>
+                    <li>Augmentation de la capacité de production de l'usine de Norville</li>
+                    <li>Adoption de technologies alternatives pour optimiser la consommation (REUT, récupération d'eau de pluie)</li>
+                    <li>Révision de la tarification de l'eau pour compenser les coûts additionnels</li>
+                </ul>
+                
+                <table class="solution-table">
+                    <tr>
+                        <th>Solution</th>
+                        <th>Coût Total (2025-2030)</th>
+                        <th>Financements Confirmés</th>
+                        <th>Reste à Lever</th>
+                    </tr>
+                    <tr>
+                        <td>Rénovation des réseaux (réduction fuites)</td>
+                        <td>60 M€</td>
+                        <td>30 M€ (Agence de l'Eau + collectivités)</td>
+                        <td>30 M€ (appels à projets UE)</td>
+                    </tr>
+                    <tr>
+                        <td>Zones humides (500 ha)</td>
+                        <td>30 M€</td>
+                        <td>15 M€ (Plan France 2030)</td>
+                        <td>15 M€ (fonds privés)</td>
+                    </tr>
+                    <tr>
+                        <td>REUT industrielle</td>
+                        <td>25 M€</td>
+                        <td>10 M€ (Région Normandie)</td>
+                        <td>15 M€ (industriels)</td>
+                    </tr>
+                </table>
+            `
+        },
+        fermetureUsines: {
+            name: "Fermeture d'usines",
+            description: "Impact de la fermeture d'usines (GIE Esso Energie 2, Le Havre Métropole)",
+            elements: [
+                { name: "GIE Esso Energie 2", value: -9109230 },
+                { name: "Le Havre Métropole", value: -10350000 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Ce scénario prévoit une réduction de la consommation d'eau de 19 459 230 m³/an, soit 64.9% de la consommation industrielle en moins.</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Mécanismes impactés</th>
+                        <th>Volume de départ (m³/an)</th>
+                        <th>Variation en volume (m³/an)</th>
+                    </tr>
+                    <tr>
+                        <td>Pompage dans le sol</td>
+                        <td>29 974 253,9</td>
+                        <td>-19 459 230</td>
+                    </tr>
+                    <tr>
+                        <td>Pompage dans les nappes souterraines</td>
+                        <td>61 000</td>
+                        <td>-39 601</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets dans les sols (5% des rejets)</td>
+                        <td>5% des rejets</td>
+                        <td>-972 962</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets dans les étendues d'eau (95% des rejets)</td>
+                        <td>95% des rejets</td>
+                        <td>-18 486 268</td>
+                    </tr>
+                    <tr>
+                        <td>Assainissement des entreprises</td>
+                        <td>5 000</td>
+                        <td>-3 246</td>
+                    </tr>
+                    <tr>
+                        <td>Approvisionnement eau industrielle</td>
+                        <td>66 530</td>
+                        <td>-43 191</td>
+                    </tr>
+                </table>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Impact positif sur l'environnement : réduction de la pression sur les nappes phréatiques et les cours d'eau</li>
+                    <li>Impact économique négatif : baisse des recettes générées par la consommation d'eau (nécessité de réviser la tarification)</li>
+                    <li>Impact social positif : amélioration de la qualité de vie des agriculteurs et création potentielle d'emplois verts</li>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <ul>
+                    <li>Révision complète du tarif de l'eau pour compenser la baisse des recettes</li>
+                    <li>Rationalisation des coûts fixes par une révision des infrastructures existantes</li>
+                    <li>Priorisation de la maintenance des équipements critiques</li>
+                    <li>Soutien à la création de nouvelles industries durables</li>
+                </ul>
+            `
+        },
+        efficaciteUsines: {
+            name: "Amélioration de l'efficacité des usines",
+            description: "Réduction de 10% de la consommation d'eau des usines sur 15 ans",
+            elements: [
+                { name: "Réduction de consommation", value: -2997425 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Ce scénario vise à réduire la consommation d'eau des usines de 10% sur 15 ans, ce qui entraînerait une diminution de 2 997 425 m³/an.</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Mécanismes impactés</th>
+                        <th>Volume de départ (m³/an)</th>
+                        <th>Variation en volume (m³/an)</th>
+                    </tr>
+                    <tr>
+                        <td>Pompage dans le sol</td>
+                        <td>29 974 253,9</td>
+                        <td>-2 997 425</td>
+                    </tr>
+                    <tr>
+                        <td>Pompage dans les nappes souterraines</td>
+                        <td>61 000</td>
+                        <td>-54 900</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets dans les sols (5% des rejets)</td>
+                        <td>5% des rejets</td>
+                        <td>-149 871</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets dans les étendues d'eau (95% des rejets)</td>
+                        <td>95% des rejets</td>
+                        <td>-2 847 554</td>
+                    </tr>
+                    <tr>
+                        <td>Assainissement des entreprises</td>
+                        <td>5 000</td>
+                        <td>-500</td>
+                    </tr>
+                    <tr>
+                        <td>Approvisionnement eau industrielle</td>
+                        <td>66 530</td>
+                        <td>-6 653</td>
+                    </tr>
+                </table>
+                
+                <h3>Méthodes d'amélioration</h3>
+                <ul>
+                    <li>Optimisation des procédés industriels (recirculation interne, circuits fermés)</li>
+                    <li>Réutilisation et recyclage de l'eau (filtration par osmose inverse)</li>
+                    <li>Récupération des eaux de pluie (coût d'investissement : 30-60€/m² de toiture)</li>
+                    <li>Réduction des pertes (fuites, évaporation, infiltration)</li>
+                    <li>Technologies alternatives (électrolyse, ultrasons, membranes filtrantes)</li>
+                </ul>
+                
+                <h3>Conséquences positives</h3>
+                <ul>
+                    <li>Réduction des coûts : moins d'eau prélevée => moins de dépenses en eau et traitement</li>
+                    <li>Moins de pression sur les ressources naturelles</li>
+                    <li>Baisse des besoins en infrastructure</li>
+                    <li>Réduction de l'impact environnemental</li>
+                    <li>Conformité réglementaire</li>
+                    <li>Attractivité pour les investisseurs soucieux de l'environnement</li>
+                </ul>
+            `
+        },
+        tarification: {
+            name: "Évolution de la tarification",
+            description: "Impact de l'évolution des tarifs sur la consommation d'eau",
+            elements: [
+                { name: "Augmentation naturelle (16.05% sur 15 ans)", value: -2.41 },
+                { name: "Augmentation de 1€", value: -5.73 },
+                { name: "Augmentation de x€", value: -6.53 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Ce scénario étudie l'impact des variations tarifaires sur la consommation d'eau.</p>
+                
+                <h3>Variation naturelle (statu quo)</h3>
+                <ul>
+                    <li>Augmentation prévue du prix de l'eau : 16.05% sur 15 ans (1.07%/an)</li>
+                    <li>Élasticité-prix de la demande : -0.15</li>
+                    <li>Impact sur la demande : réduction de 2.41%</li>
+                    <li>Inflation cumulée sur 15 ans : 33.7%</li>
+                    <li>Variation nette de la demande : +31.29%</li>
+                </ul>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Mécanismes impactés</th>
+                        <th>Valeur de départ (m³/an)</th>
+                        <th>Variation en volume (m³/an)</th>
+                    </tr>
+                    <tr>
+                        <td>Approvisionnement en eau potable (particuliers)</td>
+                        <td>11 100</td>
+                        <td>14 589 (après 15 ans)</td>
+                    </tr>
+                    <tr>
+                        <td>Approvisionnement en eau potable (entreprises)</td>
+                        <td>600</td>
+                        <td>788 (après 15 ans)</td>
+                    </tr>
+                    <tr>
+                        <td>Assainissement des entreprises</td>
+                        <td>5 000</td>
+                        <td>6 564 (après 15 ans)</td>
+                    </tr>
+                </table>
+                
+                <h3>Augmentation de 1€</h3>
+                <ul>
+                    <li>Prix actuel eau potable : 2.62€/m³</li>
+                    <li>Prix actuel eau industrielle : 3.37€/m³</li>
+                    <li>Augmentation en % : 38.17% (eau potable), 29.7% (eau industrielle)</li>
+                    <li>Réduction de la demande : 5.73% (eau potable), 4.46% (eau industrielle)</li>
+                </ul>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Mécanismes impactés</th>
+                        <th>Volume de départ (m³/an)</th>
+                        <th>Variation du volume (m³/an)</th>
+                    </tr>
+                    <tr>
+                        <td>Eau potable (particuliers)</td>
+                        <td>11 100</td>
+                        <td>-636,03</td>
+                    </tr>
+                    <tr>
+                        <td>Eau industrielle (approvisionnement)</td>
+                        <td>66 530</td>
+                        <td>-2 965,67</td>
+                    </tr>
+                </table>
+                
+                <h3>Augmentation de x€</h3>
+                <p>La variation du volume de consommation en fonction de l'augmentation tarifaire de x euros est calculée comme suit :</p>
+                <ul>
+                    <li>Pour l'eau potable : la consommation diminuera de 6,53×x m³/an</li>
+                    <li>Pour l'eau industrielle : la consommation diminuera de 29,65×x m³/an</li>
+                </ul>
+                
+                <h3>Scénario alternatif : tarification dynamique</h3>
+                <p>Options possibles :</p>
+                <ul>
+                    <li>Tarification par paliers (ex: tarif réduit pour les premiers 30 m³, majoré au-delà)</li>
+                    <li>Tarification proportionnelle continue (Tarif unitaire = a*V^b)</li>
+                    <li>Tarification variable selon critères externes (sécheresse, saisonnalité)</li>
+                </ul>
+                
+                <h3>Avantages</h3>
+                <ul>
+                    <li>Encourage une gestion plus responsable des ressources</li>
+                    <li>Assure l'équilibre économique du réseau</li>
+                    <li>Favorise la circularité (réutilisation, réduction des pertes)</li>
+                </ul>
+            `
+        },
+        inondations: {
+            name: "Inondations aggravées",
+            description: "Impact des inondations aggravées par le dérèglement climatique",
+            elements: [
+                { name: "Augmentation crues majeures", value: 30 },
+                { name: "Habitants zones inondables", value: 15000 },
+                { name: "Dommages matériels", value: 100 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Les modèles hydrologiques prévoient une augmentation de 30 à 40 % des crues majeures de la Seine d'ici 2050.</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Impact</th>
+                        <th>Valeur</th>
+                    </tr>
+                    <tr>
+                        <td>Habitants concernés</td>
+                        <td>15 000 dans les zones inondables (PPRI)</td>
+                    </tr>
+                    <tr>
+                        <td>Dommages matériels potentiels</td>
+                        <td>50 à 100 M€/an (estimation basée sur 2018)</td>
+                    </tr>
+                    <tr>
+                        <td>Polluants remobilisés (PCB, hydrocarbures)</td>
+                        <td>2 à 5 tonnes/an lors des crues</td>
+                    </tr>
+                </table>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Dégâts aux infrastructures</li>
+                    <li>Contamination des eaux</li>
+                    <li>Remobilisation des polluants</li>
+                    <li>Menace pour la potabilisation de l'eau</li>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <ul>
+                    <li>Restauration des zones humides</li>
+                    <li>Surélévation des infrastructures</li>
+                    <li>Plans d'urgence</li>
+                </ul>
+                
+                <table class="solution-table">
+                    <tr>
+                        <th>Solution</th>
+                        <th>Coût Total (2025-2030)</th>
+                        <th>Financements Confirmés</th>
+                        <th>Reste à Lever</th>
+                    </tr>
+                    <tr>
+                        <td>Zones humides (500 ha)</td>
+                        <td>30 M€</td>
+                        <td>15 M€ (Plan France 2030)</td>
+                        <td>15 M€ (fonds privés)</td>
+                    </tr>
+                    <tr>
+                        <td>Protection littorale</td>
+                        <td>50 M€</td>
+                        <td>20 M€ (État + AROPA)</td>
+                        <td>30 M€ (fonds climat)</td>
+                    </tr>
+                </table>
+                
+                <h3>Feuille de route prioritaire</h3>
+                <ol>
+                    <li>2025-2027 :
+                        <ul>
+                            <li>Lancer les appels à projets FEDER</li>
+                            <li>Moderniser 50 km de réseaux prioritaires</li>
+                        </ul>
+                    </li>
+                    <li>2028-2030 :
+                        <ul>
+                            <li>Restaurer 200 ha de zones humides</li>
+                        </ul>
+                    </li>
+                </ol>
+            `
+        },
+        canicules: {
+            name: "Canicules et stress hydrique",
+            description: "Impact des canicules et du stress hydrique croissant",
+            elements: [
+                { name: "Augmentation température", value: 2 },
+                { name: "Jours de canicule/an", value: 20 },
+                { name: "Consommation eau potable", value: 15 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Projections climatiques (Météo France, 2023) : +2°C d'ici 2050 en Normandie, avec des vagues de chaleur deux fois plus fréquentes (jusqu'à 20 jours/an contre 10 aujourd'hui).</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Impact</th>
+                        <th>Valeur</th>
+                    </tr>
+                    <tr>
+                        <td>Consommation d'eau potable</td>
+                        <td>+10 à 15% en été (+1,2 million de m³/an pour Caux-Seine)</td>
+                    </tr>
+                    <tr>
+                        <td>Débits de la Seine</td>
+                        <td>-20 à 30% en période estivale</td>
+                    </tr>
+                    <tr>
+                        <td>Pertes agricoles</td>
+                        <td>5 M€/an en cas de restrictions d'irrigation</td>
+                    </tr>
+                    <tr>
+                        <td>Coût de traitement de l'eau</td>
+                        <td>Passe de 1,0 €/m³ en 2025 à 3,0 €/m³ en 2050</td>
+                    </tr>
+                </table>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Hausse de la consommation d'eau (+7 L/jour/habitant en été)</li>
+                    <li>Stress hydrique</li>
+                    <li>Sécheresses</li>
+                    <li>Pertes agricoles importantes</li>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <ul>
+                    <li>Réduction des fuites (potentiel : 3,6 M m³/an)</li>
+                    <li>Récupération d'eaux pluviales (potentiel : 1,2 M m³/an)</li>
+                    <li>Modernisation des bâtiments</li>
+                </ul>
+                
+                <h3>Impacts sur l'agriculture</h3>
+                <table class="impact-table">
+                    <tr>
+                        <th>Culture</th>
+                        <th>Pertes de rendement estimées</th>
+                    </tr>
+                    <tr>
+                        <td>Maïs et betterave</td>
+                        <td>-30% en cas de canicule prolongée</td>
+                    </tr>
+                    <tr>
+                        <td>Prairies</td>
+                        <td>-20% (sécheresses estivales)</td>
+                    </tr>
+                    <tr>
+                        <td>Légumes</td>
+                        <td>-15% (lessivage des sols après inondation)</td>
+                    </tr>
+                    <tr>
+                        <td>Blé</td>
+                        <td>Relativement résilient (pas de perte anticipée)</td>
+                    </tr>
+                </table>
+                
+                <h3>Recommandations</h3>
+                <ul>
+                    <li>Diversification des cultures</li>
+                    <li>Développement de techniques agricoles résilientes (agroécologie, irrigation raisonnée)</li>
+                    <li>Accompagnement des exploitants</li>
+                </ul>
+            `
+        },
+        tempetes: {
+            name: "Tempêtes et montée du niveau marin",
+            description: "Impact des tempêtes et de la montée du niveau de la mer",
+            elements: [
+                { name: "Érosion côtière", value: 0.5 },
+                { name: "Hausse niveau mer", value: 50 },
+                { name: "Dégâts digues", value: 10 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Le littoral normand subit une érosion moyenne de 0,5 à 1 m/an (BRGM, 2022), et la hausse du niveau de la Seine-Maritime pourrait atteindre 50 cm d'ici 2100 (scénario RCP8.5 du GIEC).</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Impact</th>
+                        <th>Valeur</th>
+                    </tr>
+                    <tr>
+                        <td>Érosion côtière</td>
+                        <td>0,5 à 1 m/an</td>
+                    </tr>
+                    <tr>
+                        <td>Hausse du niveau de la mer</td>
+                        <td>50 cm d'ici 2100</td>
+                    </tr>
+                    <tr>
+                        <td>Dégâts sur les digues</td>
+                        <td>10 M€/an actuellement, +20% d'intensité d'ici 2050</td>
+                    </tr>
+                    <tr>
+                        <td>Coût de protection</td>
+                        <td>10 M€/an pour les infrastructures portuaires</td>
+                    </tr>
+                </table>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Érosion côtière accélérée</li>
+                    <li>Inondations des zones basses</li>
+                    <li>Dégâts aux infrastructures portuaires (Port-Jérôme, Le Havre)</li>
+                    <li>Salinisation des nappes phréatiques côtières</td>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <ul>
+                    <li>Renforcement des digues</li>
+                    <li>Relocalisation des installations vulnérables</li>
+                    <li>Protection des dunes et falaises</li>
+                </ul>
+                
+                <table class="solution-table">
+                    <tr>
+                        <th>Solution</th>
+                        <th>Coût Total (2025-2030)</th>
+                        <th>Financements Confirmés</th>
+                        <th>Reste à Lever</th>
+                    </tr>
+                    <tr>
+                        <td>Protection littorale</td>
+                        <td>50 M€</td>
+                        <td>20 M€ (État + AROPA)</td>
+                        <td>30 M€ (fonds climat)</td>
+                    </tr>
+                </table>
+            `
+        },
+        pollutionIndustrielle: {
+            name: "Pollution industrielle et agricole",
+            description: "Impact de la pollution industrielle et agricole sur les ressources en eau",
+            elements: [
+                { name: "Nitrates nappes phréatiques", value: 40 },
+                { name: "Métaux lourds rejetés", value: 200 },
+                { name: "Coût dépollution", value: 15 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Les rejets de nitrates dans les nappes phréatiques dépassent encore 40 mg/L (seuil UE : 50 mg/L), et 15 % des points de contrôle de la Seine affichent des taux de pesticides non conformes (Agence de l'Eau, 2023).</p>
+                
+                <table class="impact-table">
+                    <tr>
+                        <th>Impact</th>
+                        <th>Valeur</th>
+                    </tr>
+                    <tr>
+                        <td>Nitrates dans les nappes</td>
+                        <td>>40 mg/L (seuil UE: 50 mg/L)</td>
+                    </tr>
+                    <tr>
+                        <td>Points de contrôle non conformes (pesticides)</td>
+                        <td>15% dans la Seine</td>
+                    </tr>
+                    <tr>
+                        <td>Métaux lourds rejetés (zinc, cuivre)</td>
+                        <td>200 tonnes/an</td>
+                    </tr>
+                    <tr>
+                        <td>Coût de dépollution</td>
+                        <td>15 M€/an aux collectivités</td>
+                    </tr>
+                    <tr>
+                        <td>Captages inutilisables d'ici 2030</td>
+                        <td>10% (salinité)</td>
+                    </tr>
+                </table>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Dégradation de la qualité de l'eau</li>
+                    <li>Coûts de traitement accrus (+10-15% d'ici 2030)</li>
+                    <li>Risque pour l'approvisionnement en eau potable</li>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <ul>
+                    <li>Surveillance renforcée des rejets industriels</li>
+                    <li>Pratiques agricoles durables</li>
+                    <li>Réutilisation des eaux industrielles</li>
+                </ul>
+                
+                <table class="solution-table">
+                    <tr>
+                        <th>Solution</th>
+                        <th>Coût Total (2025-2030)</th>
+                        <th>Financements Confirmés</th>
+                        <th>Reste à Lever</th>
+                    </tr>
+                    <tr>
+                        <td>REUT industrielle</td>
+                        <td>25 M€</td>
+                        <td>10 M€ (Région Normandie)</td>
+                        <td>15 M€ (industriels)</td>
+                    </tr>
+                    <tr>
+                        <td>Désimperméabilisation</td>
+                        <td>20 M€</td>
+                        <td>8 M€ (Agence de l'Eau)</td>
+                        <td>12 M€ (métropole)</td>
+                    </tr>
+                </table>
+            `
+        },
+        evolutionPopulation: {
+            name: "Évolution démographique",
+            description: "Impact des flux de population sur la demande en eau",
+            elements: [
+                { name: "Population 2018", value: 77910 },
+                { name: "Projection 2030", value: 78860 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Projections démographiques : population passerait de 77 910 habitants en 2018 à environ 78 860 habitants en 2030 (+1,2% en 12 ans).</p>
+                
+                <h3>Facteurs influençant la démographie</h3>
+                <ul>
+                    <li>Attractivité pour les travailleurs qualifiés (projets industriels)</li>
+                    <li>Arrivée d'étudiants et retraités</li>
+                    <li>Départs de jeunes diplômés</li>
+                    <li>Pression foncière</li>
+                    <li>Tendances nationales (vieillissement, faible natalité)</li>
+                </ul>
+                
+                <h3>Consommation d'eau</h3>
+                <p>Actuellement : 124 L/habitant/jour</p>
+                <p>Scénarios possibles :</p>
+                <ul>
+                    <li>Stabilité à 124 L/hab/jour (sobriété active)</li>
+                    <li>Scénario haut à 160 L/hab/jour (+5 L/j/an sur 10 ans)</li>
+                </ul>
+                
+                <h3>Facteurs influençant la consommation</h3>
+                <p>À la baisse :</p>
+                <ul>
+                    <li>Politiques de sobriété hydrique</li>
+                    <li>Équipements domestiques économes</li>
+                    <li>Réduction des pertes dans les réseaux (20-25% actuellement)</li>
+                    <li>Hausse des prix de l'eau</li>
+                </ul>
+                
+                <p>À la hausse :</p>
+                <ul>
+                    <li>Équipements gourmands (piscines, spas)</li>
+                    <li>Hausse des températures</li>
+                    <li>Usages agricoles et jardinage domestique (+30% espaces verts privés depuis 2022)</li>
+                </ul>
+            `
+        },
+        vieillissementInfrastructures: {
+            name: "Vieillissement des infrastructures",
+            description: "Impact du vieillissement des réseaux sur les fuites et le rendement",
+            elements: [
+                { name: "Taux renouvellement 2023", value: 0.21 },
+                { name: "Rendement réseau 2023", value: 76 }
+            ],
+            details: `
+                <h3>Analyse du Scénario</h3>
+                <p>Taux de renouvellement des réseaux d'eau potable :</p>
+                <ul>
+                    <li>2023 : 0,21%</li>
+                    <li>2022 : 0,26%</li>
+                    <li>Recommandation nationale : 1,5%/an (cycle de 60-80 ans)</li>
+                    <li>À ce rythme : 476 ans pour remplacer entièrement les canalisations</li>
+                </ul>
+                
+                <h3>Conséquences</h3>
+                <ul>
+                    <li>Rendement du réseau :
+                        <ul>
+                            <li>2023 : 76% (24% de pertes)</li>
+                            <li>2015 : 82%</li>
+                            <li>Moyenne nationale : 80%</li>
+                        </ul>
+                    </li>
+                    <li>Augmentation des risques :
+                        <ul>
+                            <li>Fuites invisibles</li>
+                            <li>Ruptures de canalisation</li>
+                            <li>Pertes d'eau non maîtrisées</li>
+                        </ul>
+                    </li>
+                    <li>Impacts :
+                        <ul>
+                            <li>Environnemental : gaspillage de la ressource</li>
+                            <li>Économique : coûts d'exploitation augmentés</li>
+                            <li>Technique : limitation de la circularité de l'eau</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h3>Solutions envisageables</h3>
+                <p>Investir dans un plan de renouvellement progressif :</p>
+                <ul>
+                    <li>Objectif : 1% de réseau renouvelé par an (12 km/an)</li>
+                    <li>Coût estimé : 4 millions € HT/an</li>
+                    <li>Montée en puissance sur 3 à 5 ans</li>
+                    <li>Cofinancements possibles (Agence de l'eau, Région, Europe)</li>
+                </ul>
+                
+                <h3>Comparaison avec d'autres territoires</h3>
+                <table class="impact-table">
+                    <tr>
+                        <th>Territoire</th>
+                        <th>Taux de renouvellement</th>
+                    </tr>
+                    <tr>
+                        <td>Caux Seine Agglo (2023)</td>
+                        <td>0,21%</td>
+                    </tr>
+                    <tr>
+                        <td>Moyenne nationale</td>
+                        <td>0,65%</td>
+                    </tr>
+                    <tr>
+                        <td>Dunkerque (objectif atteint)</td>
+                        <td>1%</td>
+                    </tr>
+                </table>
+            `
+        }
+    };
+
+    function updateScenario(scenarioKey) {
+    const scenario = scenarios[scenarioKey];
+    d3.select("#chart").html("");
+    d3.select("#legend").html(`<strong>${scenario.name}:</strong> ${scenario.description}`);
+    d3.select("#details").html(scenario.details);
+
+    const width = 600;
+    const height = 400;
+
+    const root = d3.hierarchy({ children: scenario.elements })
+        .sum(d => Math.abs(d.value));
+
+    const treemap = d3.treemap()
+        .size([width, height])
+        .padding(2);
+
+    root.sum(d => Math.abs(d.value));
+    treemap(root);
+
+    const svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .style("font", "10px sans-serif");
+
+    const nodes = svg.selectAll("g")
+        .data(root.leaves())
+        .enter()
+        .append("g")
+        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+
+    nodes.append("rect")
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => d3.interpolateCool(Math.abs(d.data.value) / 100));
+
+    nodes.append("text")
+        .attr("x", d => (d.x1 - d.x0) / 2)
+        .attr("y", d => (d.y1 - d.y0) / 2)
+        .attr("dy", ".35em")
+        .attr("class", "node")
+        .text(d => {
+            let unit = "";
+            let value = d.data.value;
+
+            if (scenarioKey === 'evolutionPopulation' || scenarioKey === 'vieillissementInfrastructures') {
+                unit = d.data.name.includes('Population') ? 'habitants' : '%';
+            } else if (scenarioKey === 'tarification') {
+                unit = '%';
+            } else {
+                if (d.data.name.includes('M€')) {
+                    unit = 'M€';
+                } else if (d.data.name.includes('tonnes')) {
+                    unit = 'tonnes';
+                } else if (d.data.name.includes('mg')) {
+                    unit = 'mg/L';
+                } else if (d.data.name.includes('cm')) {
+                    unit = 'cm';
+                } else if (d.data.name.includes('m')) {
+                    unit = 'm/an';
+                } else {
+                    unit = 'm³/an';
+                }
+            }
+
+            return `${d.data.name}: ${value > 0 ? '+' : ''}${Math.abs(value).toLocaleString()} ${unit}`;
+        })
+        .style("text-anchor", "middle");
+    }
+
+    // Charger le scénario par défaut au démarrage
+    updateScenario('ouvertureUsines');
+</script>
+
+</body>
+</html>

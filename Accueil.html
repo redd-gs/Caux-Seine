@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Projet Caux-Seine - Cartographie Dynamique et Scénarios">
+    <title>Projet Caux-Seine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .toc {
+            position: fixed;
+            top: 20%;
+            left: 0;
+            background-color: #f4f4f4;
+            padding: 1rem;
+            border-right: 2px solid #ddd;
+            width: 200px;
+            height: 70%;
+            overflow-y: auto;
+        }
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+        .toc ul li {
+            margin: 0.5rem 0;
+        }
+        .toc ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .toc ul li a:hover {
+            color: #4CAF50;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 1rem;
+        }
+        .section-title {
+            background-color: #87CEEB;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+        }
+        .section-title span {
+            margin-right: 0.5rem;
+        }
+        .logo {
+            width: 130px;
+            height: auto;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+        }
+        header {
+            position: relative;
+            height: 300px;
+            background-image: url('https://www.normandie-tourisme.fr/wp-content/uploads/2020/12/le-havre-port-940x627.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 1rem;
+        }
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        header nav {
+            margin-top: 1.5rem;
+        }
+        header nav a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        header nav a:hover {
+            background-color: rgba(135, 206, 235, 0.7);
+        }
+        .intro-text {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .intro-text h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+        .carousel-item {
+            flex: none;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .carousel-item img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/fr/thumb/0/09/Logo-Caux-seine-agglo.png/640px-Logo-Caux-seine-agglo.png" alt="Logo Caux-Seine">
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <h1>Projet Caux-Seine</h1>
+            <p>Gestion intégrée de la ressource en eau et circularité</p>
+            <nav>
+                <a href="#accueil" target="_self"><strong>Accueil</strong></a>
+                <a href="Scénarios.html" target="_blank"><strong>Scénarios</strong></a>
+                <a href="Solutions.html" target="_blank"><strong>Solutions</strong></a>
+                <a href="Cartographies.html" target="_blank"><strong>Cartographies</strong></a>
+                <a href="Passation.html" target="_blank"><strong>Passation</strong></a>
+                <a href="Méthodologie.html" target="_blank"><strong>Méthodologie</strong></a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="toc">
+        <h2>Table des Matières</h2>
+        <ul>
+            <li><a href="#accueil">🌟 Accueil</a></li>
+            <li><a href="Scénarios.html" target="_blank">📂 Scénarios</a></li>
+            <li><a href="Solutions.html" target="_blank">🛠 Solutions</a></li>
+            <li><a href="Cartographies.html" target="_blank">🗺️ Cartographies</a></li>
+            <li><a href="Passation.html" target="_blank">📄 Passation</a></li>
+            <li><a href="Méthodologie.html" target="_blank">🔬 Méthodologie</a></li>
+        </ul>
+    </div>
+
+    <main class="content">
+        <section id="accueil">
+            <h2 class="section-title"><span>🌟</span> Bienvenue au Projet Caux-Seine</h2>
+            
+            <div class="intro-text">
+                <h2>Circularité de l'eau sur le territoire Caux-Seine</h2>
+                <p>Situé entre Rouen et Le Havre, le territoire de Caux-Seine occupe une position stratégique sur l’axe Seine. Son développement industriel remonte aux années 1930 avec l’implantation des premières raffineries pétrolières à Port-Jérôme. 
+                <p>Cette dynamique a progressivement attiré de nombreux acteurs de la chimie, de l’énergie et de la logistique, constituant un écosystème industriel dense. 
+                <p>Caux-Seine Agglo, intercommunalité regroupant 50 communes et environ 78 000 habitants sur 574 km², accompagne aujourd’hui la transition du territoire vers une économie décarbonée et circulaire. Elle accueille de grands projets liés au recyclage des plastiques, à la production d’hydrogène renouvelable et à la valorisation énergétique. 
+                <p>Forte de sa capacité d’accueil, de ses infrastructures multimodales et de ses partenariats industriels, Caux-Seine Agglo se positionne comme un territoire pilote en matière d’écologie industrielle et territoriale. 
+                <p>Caux-Seine Agglo, en partenariat avec l’Agence Spatiale Européenne, a fait appel à nous afin d’étudier les points critiques des réseaux d’eau du territoire, dans un contexte où l’économie circulaire ne représente plus une simple évolution, mais un changement de paradigme profond, redéfinissant durablement les modèles industriels et territoriaux. 
+                <p>Notre étude a donc consisté à analyser les réseaux d’eau industrielle et potable de Caux-Seine, sous l’angle de l’efficacité économique et environnementale. Après avoir identifié l’ensemble des acteurs et parties-prenantes de Caux-Seine et quantifié l’ensemble les flux impliqués, nous avons modélisé l’ensemble du réseau. A l’aide de ces éléments, nous avons ensuite effectué des analyses dans le cadre de différents scénarios qui nous semblaient pertinents pour Caux-Seine. Des scénarios environnementaux, économiques, sociaux et technologiques ont fait l’objet de nos études. Nous avons ensuite modélisé ces scénarios, identifié les points critiques, et enfin proposé des solutions pour faire face à ces potentiels défis.  
+                <p>Ce site présenterales résultats de notre rapport. Dans un premier temps, un état de l'art des réseaux de Caux-Seine, à travers une modélisation précise des réseaux d'eau. Cette modélisation consiste en une cartographie qualitative fonctionnelle, puis en une cartographie quantitative basée sur des contraintes chiffrées, issues de nos analyses. Dans un second temps, nous nous attacherons à présenter le cœur du sujet, à savoir l’étude des points critiques à travers des scénarios choisis. Nous présenterons alors les solutions associées. Enfin, nous donnerons des indications quant aux prochaines étapes potentielles de l’étude. 
+            </div>
+
+            <div class="image-section">
+                <img src="https://prmeng.rosselcdn.net/sites/default/files/dpistyles_v2/ena_16_9_extra_big/2022/01/25/node_272464/38848276/public/2022/01/25/B9729714868Z.1_20220125113941_000%2BG88JO5ETA.1-0.jpg?itok=nOdLpHuE1643107188" alt="Illustration du territoire de Caux-Seine" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Projet Caux-Seine. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

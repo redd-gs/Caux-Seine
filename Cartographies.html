@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartographies - Projet Caux-Seine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #87CEEB;
+            --accent-color: #4CAF50;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://www.normandie-tourisme.fr/wp-content/uploads/2020/12/le-havre-port-940x627.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            width: 130px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        nav {
+            margin-top: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            display: inline-block;
+        }
+
+        .section-description {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Style des carrousels */
+        .carousel-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 20px;
+            padding: 20px 0;
+            border-radius: 8px;
+            background-color: var(--light-bg);
+        }
+
+        .carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .carousel::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        .carousel-item {
+            scroll-snap-align: start;
+            flex: 0 0 auto;
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .carousel-img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .carousel-caption {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .carousel-caption h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+        }
+
+        .carousel-nav {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .carousel-nav button {
+            background: var(--secondary-color);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-nav button:hover {
+            background: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--dark-bg);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-item {
+                width: 90%;
+            }
+
+            nav a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        /* Style pour la lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 28px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .lightbox-close:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Style pour la section Miro */
+        .miro-container {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .miro-link {
+            display: inline-block;
+            background-color: #87CEEB;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .miro-link:hover {
+            background-color: #2c3e50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .miro-note {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/fr/thumb/0/09/Logo-Caux-seine-agglo.png/640px-Logo-Caux-seine-agglo.png" alt="Logo Caux-Seine">
+        <h1>Cartographies du Projet Caux-Seine</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="Scénarios.html">Scénarios</a>
+            <a href="Solutions.html">Solutions</a>
+            <a href="Cartographies.html">Cartographies</a>
+            <a href="Passation.html">Passation</a>
+            <a href="Méthodologie.html">Méthodologie</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Section Cartographies STAN -->
+        <section class="section">
+            <h2 class="section-title">Cartographies STAN</h2>
+            <p class="section-description">
+                Visualisations des flux hydriques et analyses territoriales produites avec l'outil STAN.
+                Ces cartographies permettent d'identifier les zones critiques et les opportunités d'optimisation.
+            </p>
+
+            <div class="carousel-container">
+                <div class="carousel" id="stan-carousel">
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/3yDwKLHY/r-seau-d-eau-industrielle.jpg" alt="Réseau d'eau industrielle" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/NLKxDMnC/r-seau-d-eau-industrielle.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Réseau d'eau industrielle</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/gQd0WMq/pompage-entreprises.jpg" alt="Pompage Entreprises" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/xqB34QDf/pompage-entreprises.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Pompage Entreprises</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/nM10R8Kw/nappes.jpg" alt="Nappes" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/G82xZhm2/nappes.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Nappes</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/zTwZJZkm/particuliers.jpg" alt="Particuliers" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/VS4FGb1p/particuliers.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Particuliers</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/21MdhgJm/sol.jpg" alt="Sol" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/nXGKrQsr/sol.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Sol</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/LdKK1qR8/entreprises.jpg" alt="Entreprises" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/xJ43YDXP/entreprises.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Entreprises</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/vvHF6PBf/syst-me.jpg" alt="Système" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/GB3FyhYQ/syst-me.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Système</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/fdR9Mr9c/tendues-d-eau.jpg" alt="Etendues d'eau" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/rKWN6HMS/tendues-d-eau.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Etendues d'eau</h3>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/0VVrJcpM/r-seaux-d-eau.jpg" alt="Réseaux d'eau" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/VJ8BzFk2/r-seaux-d-eau.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Réseaux d'eau</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <button onclick="document.getElementById('stan-carousel').scrollBy(-850, 0)">❮</button>
+                    <button onclick="document.getElementById('stan-carousel').scrollBy(850, 0)">❯</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Cartographies Miro -->
+        <section class="section">
+            <h2 class="section-title">Cartographies Miro</h2>
+            <p class="section-description">
+                Cartes conceptuelles et schémas d'interaction produits sur la plateforme Miro.
+                Ces visualisations aident à comprendre les relations entre les différents acteurs et systèmes.
+            </p>
+
+            <div class="miro-container">
+                <h3>Accès aux cartographies Miro</h3>
+                <p>Explorez nos cartographies interactives complètes sur la plateforme Miro :</p>
+                <a href="https://miro.com/app/board/uXjVL84_CFM=/" target="_blank" class="miro-link">
+                    Accéder au tableau Miro complet
+                </a>
+                <p class="miro-note">(Le lien s'ouvrira dans un nouvel onglet)</p>
+            </div>
+        </section>
+
+        <!-- Section Cartographie Quantitative -->
+        <section class="section">
+            <h2 class="section-title">Cartographie Quantitative</h2>
+            <p class="section-description">
+                Analyse quantitative des données territoriales pour une meilleure compréhension des flux et des interactions.
+            </p>
+
+            <div class="carousel-container">
+                <div class="carousel" id="quantitative-carousel">
+                    <div class="carousel-item">
+                        <img src="https://i.ibb.co/qQ72H44/Cartographie-Quantitative.jpg" alt="Cartographie Quantitative" class="carousel-img" onclick="openLightbox('https://i.postimg.cc/Czw1hS54/Cartographie-Quantitative.jpg')">
+                        <div class="carousel-caption">
+                            <h3>Cartographie Quantitative</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <button onclick="document.getElementById('quantitative-carousel').scrollBy(-850, 0)">❮</button>
+                    <button onclick="document.getElementById('quantitative-carousel').scrollBy(850, 0)">❯</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Lightbox pour afficher les images en taille réelle -->
+    <div class="lightbox" id="lightbox">
+        <img src="" alt="Image en taille réelle" id="lightbox-img">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    </div>
+
+    <footer>
+        <p>Projet de circularité de l'eau sur le territoire de Caux-Seine</p>
+        <p>© 2023 Tous droits réservés</p>
+    </footer>
+
+    <script>
+        // Script pour améliorer le défilement des carrousels
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            carousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - carousel.offsetLeft;
+                scrollLeft = carousel.scrollLeft;
+                carousel.style.cursor = 'grabbing';
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+                isDown = false;
+                carousel.style.cursor = 'grab';
+            });
+
+            carousel.addEventListener('mouseup', () => {
+                isDown = false;
+                carousel.style.cursor = 'grab';
+            });
+
+            carousel.addEventListener('mousemove', (e) => {
+                if(!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - carousel.offsetLeft;
+                const walk = (x - startX) * 2;
+                carousel.scrollLeft = scrollLeft - walk;
+            });
+        });
+
+        // Script pour la lightbox
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            // Charger l'image en haute résolution
+            lightboxImg.src = src;
+            
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fermer la lightbox en cliquant à l'extérieur de l'image
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
